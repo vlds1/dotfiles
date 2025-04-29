@@ -1,10 +1,13 @@
 set nocompatible
 set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯЖ;ABCDEFGHIJKLMNOPQRSTUVWXYZ:,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz
 
+" Добавляем go/bin в PATH, чтобы Vim видел установленные tools
+let $PATH = expand('$HOME/go/bin') . ':' . $PATH
+
 set encoding=utf-8
 set fileencodings=utf-8
 
-filetype off
+filetype off                  " required
 
 " Чтобы возле файлов отображались буквы: M,A,U,R,D,E,I,C - от гита
 let g:NERDTreeGitStatusIndicatorMapCustom = {'Modified' : 'M', 'Staged' : 'A', 'Untracked' : 'U', 'Renamed'   : 'R', 'Unmerged'  : 'E', 'Deleted'   : 'D', 'Dirty'     : 'M', 'Ignored'   : 'I', 'Clean'     : 'C', 'Unknown'   : '?'}
@@ -36,12 +39,13 @@ colorscheme gruvbox
 
 let g:ackprg = 'ag --vimgrep --no-heading --smart-case --nocolor'
 let NERDTreeShowHidden=1
+let g:NERDTreeQuitOnOpen = 1
 let g:go_def_mode  = 'gopls'
 let g:go_info_mode = 'gopls'
 let mapleader=" "
 let g:gruvbox_contrast_dark='hard'
-
-
+let g:airline#extensions#tabline#enabled = 1
+set showtabline=1
 " Отключение колесика мыши
 set mouse=
 set background=dark
@@ -53,12 +57,13 @@ set path+=**
 
 
 nnoremap <Leader><Leader> <Plug>(easymotion-prefix)
-" Чтобы провалиться в функцию shortcut: ,+g+d
+" Чтобы провалиться в функцию
 nmap <Leader>gd :GoDef<CR>
-" Чтобы вурнуться назад shortcut: ,+g+b
+" Чтобы вурнуться назад 
 nmap <Leader>gb :GoDefPop<CR>
 
 " Гит
+nmap <silent> <Leader><Leader>пе :call<SID>GitPrompt()<CR>
 nmap <silent> <Leader><Leader>gt :call<SID>GitPrompt()<CR>
 function! s:GitPrompt() abort
   let flags = input('git ')
@@ -68,28 +73,12 @@ function! s:GitPrompt() abort
   endif
   execute 'Git ' . flags 
 endfunction
-
-nmap <Leader>gtm <Plug>(git-messenger)
-nmap <Leader>gts :Git status<CR>
-nmap <Leader>gtps :Git push<CR>
-nmap <Leader>gtpl :Git pull<CR>
-
-nmap <silent> <Leader>gtb :call<SID>GitBranchPrompt()<CR>
-function! s:GitBranchPrompt() abort
-  let flags = input('git branch ')
-  execute 'Git branch ' . flags
-endfunction
 nmap <Leader>gtd :Gdiffsplit<CR>
 
-nmap <silent> <Leader>gtco :call<SID>GitCheckoutPrompt()<CR>
-function! s:GitCheckoutPrompt() abort
-  let flags = input('git checkout ')
-  if empty(flags)
-    echohl WarningMsg | echom "Branch name cannot be empty" | echohl None
-    return
-  endif
-  execute 'Git checkout ' . flags 
-endfunction
+nmap <leader>h :bp<CR>
+nmap <leader>l :bn<CR>
+nmap <leader>x :bd<CR>
+
 " Проводник по проекту
 nmap <C-N> :NERDTreeToggle<CR>
 " Поиск текста по файлаы
@@ -100,14 +89,3 @@ nnoremap <Up> <NOP>
 nnoremap <Down> <NOP>
 nnoremap <Left> <NOP>
 nnoremap <Right> <NOP>
-
-inoremap <Up> <NOP>
-inoremap <Down> <NOP>
-inoremap <Left> <NOP>
-inoremap <Right> <NOP>
-
-cnoremap <Up> <NOP>
-cnoremap <Down> <NOP>
-cnoremap <Left> <NOP>
-cnoremap <Right> <NOP>
-
